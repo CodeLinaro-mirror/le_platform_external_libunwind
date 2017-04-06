@@ -262,7 +262,7 @@ AC_MSG_RESULT([$enable_msabi_support])
 LIBLZMA=
 AC_MSG_CHECKING([whether to support LZMA-compressed symbol tables])
 AC_ARG_ENABLE(minidebuginfo,
-AS_HELP_STRING([--enable-minidebuginfo], [Enables support for LZMA-compressed symbol tables]),, [enable_minidebuginfo=auto])
+AS_HELP_STRING([--enable-minidebuginfo], [Enables support for LZMA-compressed symbol tables]),, [enable_minidebuginfo=no])
 AC_MSG_RESULT([$enable_minidebuginfo])
 if test x$enable_minidebuginfo != xno; then
    AC_CHECK_LIB([lzma], [lzma_mf_is_supported],
