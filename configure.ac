@@ -39,7 +39,7 @@ CHECK_ANDROID
 
 dnl Checks for header files.
 AC_HEADER_STDC
-AC_CHECK_HEADERS(asm/ptrace_offsets.h endian.h sys/endian.h execinfo.h \
+AC_CHECK_HEADERS(asm/ptrace.h asm/ptrace_offsets.h endian.h sys/endian.h execinfo.h \
 		ia64intrin.h sys/uc_access.h unistd.h signal.h sys/types.h \
 		sys/procfs.h sys/ptrace.h byteswap.h elf.h sys/elf.h link.h sys/link.h)
 
@@ -59,9 +59,9 @@ AC_CHECK_TYPES([struct elf_prstatus, struct prstatus], [], [],
 #endif
 ])
 
-AC_CHECK_DECLS([PTRACE_POKEUSER, PTRACE_POKEDATA,
+AC_CHECK_DECLS([PTRACE_POKEDATA,
 PTRACE_TRACEME, PTRACE_CONT, PTRACE_SINGLESTEP,
-PTRACE_SYSCALL, PT_IO, PT_GETREGS,
+PTRACE_SYSCALL, PT_IO,
 PT_GETFPREGS, PT_CONTINUE, PT_TRACE_ME,
 PT_STEP, PT_SYSCALL], [], [],
 [$ac_includes_default
@@ -105,6 +105,21 @@ AC_DEFUN([SET_ARCH],[
 SET_ARCH([$build_cpu],[build_arch])
 SET_ARCH([$host_cpu],[host_arch])
 SET_ARCH([$target_cpu],[target_arch])
+
+case "${target_arch}" in
+(aarch64|mips)    AC_DEFINE([HAVE_DECL_PTRACE_POKEUSER], [0], [Defined 0 if aarch64 or mips]);;
+*)                AC_DEFINE([HAVE_DECL_PTRACE_POKEUSER], [1], [Defined 1 if not aarch64 and mips])
+esac
+
+case "${target_arch}" in
+(mips)    AC_DEFINE([HAVE_DECL_PT_GETREGS], [1], [Defined 1 if mips]);;
+*)        AC_DEFINE([HAVE_DECL_PT_GETREGS], [0], [Defined 0 if not mips])
+esac
+
+case "${target_arch}" in
+(aarch64)    AC_DEFINE([HAVE_DECL_PT_GETREGSET], [1], [Defined 1 if aarch64]);;
+*)           AC_DEFINE([HAVE_DECL_PT_GETREGSET], [0], [Defined 0 if not aarch64])
+esac
 
 AC_ARG_ENABLE(coredump,
 	AS_HELP_STRING([--enable-coredump],[building libunwind-coredump library]),,

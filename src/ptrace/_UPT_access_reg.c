@@ -36,6 +36,10 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.  */
 # include <sys/uio.h>
 #endif
 
+#if HAVE_ASM_PTRACE_H
+# include <asm/ptrace.h>
+#endif
+
 #if HAVE_DECL_PTRACE_POKEUSER || HAVE_TTRACE
 int
 _UPT_access_reg (unw_addr_space_t as, unw_regnum_t reg, unw_word_t *val,
